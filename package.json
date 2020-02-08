@@ -11,9 +11,9 @@
     "deepmerge": "~4.2.2"
   },
   "devDependencies": {
-    "@hapi/code": "~8.0.1",
+    "@hapi/code": "~7.0.0",
     "@hapi/hapi": "~19.1.0",
-    "@hapi/lab": "~22.0.3",
+    "@hapi/lab": "~21.0.0",
     "eslint": "~6.8.0",
     "eslint-config-standard": "~14.1.0",
     "eslint-plugin-import": "~2.20.1",
