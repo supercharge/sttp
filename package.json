@@ -1,0 +1,52 @@
+{
+  "name": "@supercharge/sttp",
+  "description": ":packageDescription",
+  "version": "0.0.0",
+  "author": "Marcus Pöhls <marcus@superchargejs.com>",
+  "bugs": {
+    "url": "https://github.com/supercharge/sttp/issues"
+  },
+  "dependencies": {
+    "axios": "~0.19.2",
+    "deepmerge": "~4.2.2"
+  },
+  "devDependencies": {
+    "@hapi/code": "~8.0.1",
+    "@hapi/hapi": "~19.1.0",
+    "@hapi/lab": "~22.0.3",
+    "eslint": "~6.8.0",
+    "eslint-config-standard": "~14.1.0",
+    "eslint-plugin-import": "~2.20.1",
+    "eslint-plugin-node": "~11.0.0",
+    "eslint-plugin-promise": "~4.2.1",
+    "eslint-plugin-standard": "~4.0.1"
+  },
+  "engines": {
+    "node": ">=8"
+  },
+  "files": [
+    "src"
+  ],
+  "homepage": "https://github.com/supercharge/sttp",
+  "keywords": [
+    "nodejs",
+    "supercharge",
+    "superchargejs"
+  ],
+  "license": "MIT",
+  "main": "./src/index.js",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/supercharge/sttp.git"
+  },
+  "scripts": {
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "list:tests": "lab --assert @hapi/code --dry --verbose",
+    "test": "lab --assert @hapi/code --leaks --coverage --lint --reporter console --output stdout --reporter html --output ./coverage/coverage.html",
+    "test:single": "lab --assert @hapi/code --leaks --lint --id"
+  }
+}
