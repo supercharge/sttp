@@ -115,7 +115,9 @@ class PendingSttpRequest {
    * @throws
    */
   async get (url, queryParams = {}) {
-    return this.withQueryParams(queryParams).send('GET', url)
+    return this
+      .withQueryParams(queryParams)
+      .send('GET', url)
   }
 
   /**
@@ -129,7 +131,9 @@ class PendingSttpRequest {
    * @throws
    */
   async post (url, payload = {}) {
-    return this.withPayload(payload).send('POST', url)
+    return this
+      .withPayload(payload)
+      .send('POST', url)
   }
 
   /**
@@ -143,7 +147,9 @@ class PendingSttpRequest {
    * @throws
    */
   async put (url, payload = {}) {
-    return this.withPayload(payload).send('PUT', url)
+    return this
+      .withPayload(payload)
+      .send('PUT', url)
   }
 
   /**
@@ -157,7 +163,9 @@ class PendingSttpRequest {
    * @throws
    */
   async patch (url, payload = {}) {
-    return this.withPayload(payload).send('PATCH', url)
+    return this
+      .withPayload(payload)
+      .send('PATCH', url)
   }
 
   /**
@@ -171,7 +179,9 @@ class PendingSttpRequest {
    * @throws
    */
   async delete (url, queryParams = {}) {
-    return this.withQueryParams(queryParams).send('DELETE', url)
+    return this
+      .withQueryParams(queryParams)
+      .send('DELETE', url)
   }
 
   /**
