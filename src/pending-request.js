@@ -2,12 +2,17 @@
 
 const Axios = require('axios')
 const Merge = require('deepmerge')
+const { tap } = require('@supercharge/goodies')
 const SttpResponse = require('./sttp-response')
 
-class PendingSttpRequest {
+class PendingRequest {
+  /**
+   * Createa new pending HTTP request instance.
+   */
   constructor () {
     this.options = {}
-    this._payloadFormat = 'json'
+
+    this.asJson()
   }
 
   /**
@@ -15,14 +20,12 @@ class PendingSttpRequest {
    *
    * @param {Object} headers
    *
-   * @returns {PendingSttpRequest}
+   * @returns {PendingRequest}
    */
   withHeaders (headers) {
-    this.options = Merge(this.options, {
-      headers
+    return tap(this, () => {
+      this.options = Merge(this.options, { headers })
     })
-
-    return this
   }
 
   /**
@@ -30,14 +33,12 @@ class PendingSttpRequest {
    *
    * @param {Object} queryParams
    *
-   * @returns {PendingSttpRequest}
+   * @returns {PendingRequest}
    */
   withQueryParams (queryParams) {
-    this.options = Merge(this.options, {
-      params: queryParams
+    return tap(this, () => {
+      this.options = Merge(this.options, { params: queryParams })
     })
-
-    return this
   }
 
   /**
@@ -45,19 +46,30 @@ class PendingSttpRequest {
    *
    * @param {Object} payload
    *
-   * @returns {PendingSttpRequest}
+   * @returns {PendingRequest}
    */
   withPayload (payload) {
-    this.payload = payload
+    return tap(this, () => {
+      this.payload = payload
+    })
+  }
 
+  /**
+   * Tell Sttp to send the request as JSON payload.
+   *
+   * @returns {PendingRequest}
+   */
+  asJson () {
     return this
+      .payloadFormat('json')
+      .contentType('application/json')
   }
 
   /**
    * Tell Sttp to send the request as form parameters,
    * encoded as URL query parameters.
    *
-   * @returns {PendingSttpRequest}
+   * @returns {PendingRequest}
    */
   asFormParams () {
     return this
@@ -70,12 +82,12 @@ class PendingSttpRequest {
    *
    * @param {String} format
    *
-   * @returns {PendingSttpRequest}
+   * @returns {PendingRequest}
    */
   payloadFormat (format) {
-    this._payloadFormat = format
-
-    return this
+    return tap(this, () => {
+      this.bodyFormat = format
+    })
   }
 
   /**
@@ -83,7 +95,7 @@ class PendingSttpRequest {
    *
    * @param {String} accept
    *
-   * @returns {PendingSttpRequest}
+   * @returns {PendingRequest}
    */
   accept (accept) {
     return this.withHeaders({
@@ -92,11 +104,23 @@ class PendingSttpRequest {
   }
 
   /**
+   * Set the `Accept` request header to JSON. This indicates
+   * that the server should return JSON data.
+   *
+   * @param {String} accept
+   *
+   * @returns {PendingRequest}
+   */
+  acceptJson () {
+    return this.accept('application/json')
+  }
+
+  /**
    * Set the `Content-Type` request header.
    *
    * @param {String} accept
    *
-   * @returns {PendingSttpRequest}
+   * @returns {PendingRequest}
    */
   contentType (contentType) {
     return this.withHeaders({
@@ -225,4 +249,4 @@ class PendingSttpRequest {
   }
 }
 
-module.exports = PendingSttpRequest
+module.exports = PendingRequest

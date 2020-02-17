@@ -1,6 +1,6 @@
 'use strict'
 
-const PendingSttpRequest = require('./pending-sttp-request')
+const PendingRequest = require('./pending-request')
 
 class Sttp {
   /**
@@ -8,10 +8,10 @@ class Sttp {
    *
    * @param {Object} headers
    *
-   * @returns {PendingSttpRequest}
+   * @returns {PendingRequest}
    */
   static withHeaders (headers) {
-    return new PendingSttpRequest().withHeaders(headers)
+    return new PendingRequest().withHeaders(headers)
   }
 
   /**
@@ -19,10 +19,10 @@ class Sttp {
    *
    * @param {Object} queryParams
    *
-   * @returns {PendingSttpRequest}
+   * @returns {PendingRequest}
    */
   static withQueryParams (queryParams) {
-    return new PendingSttpRequest().withQueryParams(queryParams)
+    return new PendingRequest().withQueryParams(queryParams)
   }
 
   /**
@@ -30,20 +30,29 @@ class Sttp {
    *
    * @param {Object} payload
    *
-   * @returns {PendingSttpRequest}
+   * @returns {PendingRequest}
    */
   static withPayload (payload) {
-    return new PendingSttpRequest().withPayload(payload)
+    return new PendingRequest().withPayload(payload)
+  }
+
+  /**
+   * Tell Sttp to send the request as JSON payload.
+   *
+   * @returns {PendingRequest}
+   */
+  static asJson () {
+    return new PendingRequest().asJson()
   }
 
   /**
    * Tell Sttp to send the request as form parameters,
    * encoded as URL query parameters.
    *
-   * @returns {PendingSttpRequest}
+   * @returns {PendingRequest}
    */
   static asFormParams () {
-    return new PendingSttpRequest().asFormParams()
+    return new PendingRequest().asFormParams()
   }
 
   /**
@@ -51,10 +60,22 @@ class Sttp {
    *
    * @param {String} accept
    *
-   * @returns {PendingSttpRequest}
+   * @returns {PendingRequest}
    */
   static accept (accept) {
-    return new PendingSttpRequest().accept(accept)
+    return new PendingRequest().accept(accept)
+  }
+
+  /**
+   * Set the `Accept` request header to JSON. This indicates
+   * that the server should return JSON data.
+   *
+   * @param {String} accept
+   *
+   * @returns {PendingRequest}
+   */
+  acceptJson () {
+    return new PendingRequest().acceptJson()
   }
 
   /**
@@ -62,10 +83,10 @@ class Sttp {
    *
    * @param {String} accept
    *
-   * @returns {PendingSttpRequest}
+   * @returns {PendingRequest}
    */
   static contentType (contentType) {
-    return new PendingSttpRequest().contentType(contentType)
+    return new PendingRequest().contentType(contentType)
   }
 
   /**
@@ -79,7 +100,7 @@ class Sttp {
    * @throws
    */
   static async get (url, queryParams) {
-    return new PendingSttpRequest().get(url, queryParams)
+    return new PendingRequest().get(url, queryParams)
   }
 
   /**
@@ -93,7 +114,7 @@ class Sttp {
    * @throws
    */
   static async post (url, payload) {
-    return new PendingSttpRequest().post(url, payload)
+    return new PendingRequest().post(url, payload)
   }
 
   /**
@@ -107,7 +128,7 @@ class Sttp {
    * @throws
    */
   static async put (url, payload) {
-    return new PendingSttpRequest().put(url, payload)
+    return new PendingRequest().put(url, payload)
   }
 
   /**
@@ -121,7 +142,7 @@ class Sttp {
    * @throws
    */
   static async patch (url, payload) {
-    return new PendingSttpRequest().patch(url, payload)
+    return new PendingRequest().patch(url, payload)
   }
 
   /**
@@ -135,7 +156,7 @@ class Sttp {
    * @throws
    */
   static async delete (url, queryParams) {
-    return new PendingSttpRequest().delete(url, queryParams)
+    return new PendingRequest().delete(url, queryParams)
   }
 }
 

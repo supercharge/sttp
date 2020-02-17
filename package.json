@@ -7,6 +7,7 @@
     "url": "https://github.com/supercharge/sttp/issues"
   },
   "dependencies": {
+    "@supercharge/goodies": "~1.0.0",
     "axios": "~0.19.2",
     "deepmerge": "~4.2.2"
   },
