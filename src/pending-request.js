@@ -2,7 +2,6 @@
 
 const Axios = require('axios')
 const Merge = require('deepmerge')
-const { tap } = require('@supercharge/goodies')
 const SttpResponse = require('./sttp-response')
 
 class PendingRequest {
@@ -23,7 +22,7 @@ class PendingRequest {
    * @returns {PendingRequest}
    */
   withHeaders (headers) {
-    return tap(this, () => {
+    return this.tap(() => {
       this.options = Merge(this.options, { headers })
     })
   }
@@ -36,7 +35,7 @@ class PendingRequest {
    * @returns {PendingRequest}
    */
   withQueryParams (queryParams) {
-    return tap(this, () => {
+    return this.tap(() => {
       this.options = Merge(this.options, { params: queryParams })
     })
   }
@@ -50,7 +49,7 @@ class PendingRequest {
    * @returns {PendingRequest}
    */
   withBasicAuth (username, password) {
-    return tap(this, () => {
+    return this.tap(() => {
       this.options = Merge(this.options, {
         auth: { username, password }
       })
@@ -79,7 +78,7 @@ class PendingRequest {
    * @returns {PendingRequest}
    */
   withOptions (options = {}) {
-    return tap(this, () => {
+    return this.tap(() => {
       this.options = Merge(this.options, options)
     })
   }
@@ -92,7 +91,7 @@ class PendingRequest {
    * @returns {PendingRequest}
    */
   withPayload (payload) {
-    return tap(this, () => {
+    return this.tap(() => {
       this.payload = payload
     })
   }
@@ -105,7 +104,7 @@ class PendingRequest {
    * @returns {PendingRequest}
    */
   timeout (timeout) {
-    return tap(this, () => {
+    return this.tap(() => {
       this.options = Merge(this.options, {
         timeout: timeout * 1000
       })
@@ -143,7 +142,7 @@ class PendingRequest {
    * @returns {PendingRequest}
    */
   payloadFormat (format) {
-    return tap(this, () => {
+    return this.tap(() => {
       this.bodyFormat = format
     })
   }
@@ -185,6 +184,19 @@ class PendingRequest {
     return this.withHeaders({
       'Content-Type': contentType
     })
+  }
+
+  /**
+   * Run the given `callback` before returning `this`.
+   *
+   * @param {Function} callback
+   *
+   * @returns {PendingRequest}
+   */
+  tap (callback) {
+    callback()
+
+    return this
   }
 
   /**
