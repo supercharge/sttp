@@ -303,6 +303,7 @@ class PendingRequest {
     return Axios({
       url,
       method,
+      withCredentials: true,
       ...this.options
     })
   }
