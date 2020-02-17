@@ -37,6 +37,52 @@ class Sttp {
   }
 
   /**
+   * Add basic authentication via `username` and `password` to the request.
+   *
+   * @param {String} username
+   * @param {String} password
+   *
+   * @returns {PendingRequest}
+   */
+  static withBasicAuth (username, password) {
+    return new PendingRequest().withBasicAuth(username, password)
+  }
+
+  /**
+   * Add an authorization `token` to the request.
+   *
+   * @param {String} token
+   * @param {String} type
+   *
+   * @returns {PendingRequest}
+   */
+  static withToken (token, type) {
+    return new PendingRequest().withToken(token, type)
+  }
+
+  /**
+   * Merge your own custom Axios options into the request.
+   *
+   * @param {Object} options
+   *
+   * @returns {PendingRequest}
+   */
+  static withOptions (options) {
+    return new PendingRequest().withOptions(options)
+  }
+
+  /**
+   * Define the request timeout in seconds.
+   *
+   * @param {Number} timeout
+   *
+   * @returns {PendingRequest}
+   */
+  static timeout (timeout) {
+    return new PendingRequest().timeout(timeout)
+  }
+
+  /**
    * Tell Sttp to send the request as JSON payload.
    *
    * @returns {PendingRequest}

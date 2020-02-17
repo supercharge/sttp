@@ -42,6 +42,49 @@ class PendingRequest {
   }
 
   /**
+   * Add basic authentication via `username` and `password` to the request.
+   *
+   * @param {String} username
+   * @param {String} password
+   *
+   * @returns {PendingRequest}
+   */
+  withBasicAuth (username, password) {
+    return tap(this, () => {
+      this.options = Merge(this.options, {
+        auth: { username, password }
+      })
+    })
+  }
+
+  /**
+   * Add an authorization `token` to the request.
+   *
+   * @param {String} token
+   * @param {String} type
+   *
+   * @returns {PendingRequest}
+   */
+  withToken (token, type = 'Bearer') {
+    return this.withHeaders({
+      Authorization: `${type} ${token}`.trim()
+    })
+  }
+
+  /**
+   * Merge your own custom Axios options into the request.
+   *
+   * @param {Object} options
+   *
+   * @returns {PendingRequest}
+   */
+  withOptions (options = {}) {
+    return tap(this, () => {
+      this.options = Merge(this.options, options)
+    })
+  }
+
+  /**
    * Add request payload.
    *
    * @param {Object} payload
@@ -51,6 +94,21 @@ class PendingRequest {
   withPayload (payload) {
     return tap(this, () => {
       this.payload = payload
+    })
+  }
+
+  /**
+   * Define the request timeout in seconds.
+   *
+   * @param {Number} timeout
+   *
+   * @returns {PendingRequest}
+   */
+  timeout (timeout) {
+    return tap(this, () => {
+      this.options = Merge(this.options, {
+        timeout: timeout * 1000
+      })
     })
   }
 
