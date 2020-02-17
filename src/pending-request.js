@@ -91,7 +91,8 @@ class PendingRequest {
   }
 
   /**
-   * Set the `Accept` request header.
+   * Set the `Accept` request header. This indicates what
+   * content type the server should return.
    *
    * @param {String} accept
    *
