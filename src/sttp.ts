@@ -1,8 +1,9 @@
 'use strict'
 
-const PendingRequest = require('./pending-request')
+import { SttpResponse } from './sttp-response'
+import { PendingRequest } from './pending-request'
 
-class Sttp {
+export class Sttp {
   /**
    * Add request headers.
    *
@@ -10,7 +11,7 @@ class Sttp {
    *
    * @returns {PendingRequest}
    */
-  static withHeaders (headers) {
+  static withHeaders (headers: object): PendingRequest {
     return new PendingRequest().withHeaders(headers)
   }
 
@@ -21,7 +22,7 @@ class Sttp {
    *
    * @returns {PendingRequest}
    */
-  static withQueryParams (queryParams) {
+  static withQueryParams (queryParams: object): PendingRequest {
     return new PendingRequest().withQueryParams(queryParams)
   }
 
@@ -32,7 +33,7 @@ class Sttp {
    *
    * @returns {PendingRequest}
    */
-  static withPayload (payload) {
+  static withPayload (payload: any): PendingRequest {
     return new PendingRequest().withPayload(payload)
   }
 
@@ -44,7 +45,7 @@ class Sttp {
    *
    * @returns {PendingRequest}
    */
-  static withBasicAuth (username, password) {
+  static withBasicAuth (username: string, password: string): PendingRequest {
     return new PendingRequest().withBasicAuth(username, password)
   }
 
@@ -56,7 +57,7 @@ class Sttp {
    *
    * @returns {PendingRequest}
    */
-  static withToken (token, type) {
+  static withToken (token: string, type?: string): PendingRequest {
     return new PendingRequest().withToken(token, type)
   }
 
@@ -67,7 +68,7 @@ class Sttp {
    *
    * @returns {PendingRequest}
    */
-  static withOptions (options) {
+  static withOptions (options: object): PendingRequest {
     return new PendingRequest().withOptions(options)
   }
 
@@ -78,8 +79,19 @@ class Sttp {
    *
    * @returns {PendingRequest}
    */
-  static timeout (timeout) {
-    return new PendingRequest().timeout(timeout)
+  static withTimeoutInSeconds (timeout: number): PendingRequest {
+    return new PendingRequest().withTimeoutInSeconds(timeout)
+  }
+
+  /**
+   * Define the request timeout in milliseconds.
+   *
+   * @param {Number} timeout
+   *
+   * @returns {PendingRequest}
+   */
+  static withTimeout (timeout: number): PendingRequest {
+    return new PendingRequest().withTimeout(timeout)
   }
 
   /**
@@ -87,7 +99,7 @@ class Sttp {
    *
    * @returns {PendingRequest}
    */
-  static asJson () {
+  static asJson (): PendingRequest {
     return new PendingRequest().asJson()
   }
 
@@ -97,7 +109,7 @@ class Sttp {
    *
    * @returns {PendingRequest}
    */
-  static asFormParams () {
+  static asFormParams (): PendingRequest {
     return new PendingRequest().asFormParams()
   }
 
@@ -109,7 +121,7 @@ class Sttp {
    *
    * @returns {PendingRequest}
    */
-  static accept (accept) {
+  static accept (accept: string): PendingRequest {
     return new PendingRequest().accept(accept)
   }
 
@@ -121,7 +133,7 @@ class Sttp {
    *
    * @returns {PendingRequest}
    */
-  acceptJson () {
+  acceptJson (): PendingRequest {
     return new PendingRequest().acceptJson()
   }
 
@@ -132,7 +144,7 @@ class Sttp {
    *
    * @returns {PendingRequest}
    */
-  static contentType (contentType) {
+  static contentType (contentType: string): PendingRequest {
     return new PendingRequest().contentType(contentType)
   }
 
@@ -146,7 +158,7 @@ class Sttp {
    *
    * @throws
    */
-  static async get (url, queryParams) {
+  static async get<R> (url: string, queryParams: object): Promise<SttpResponse<R>> {
     return new PendingRequest().get(url, queryParams)
   }
 
@@ -160,7 +172,7 @@ class Sttp {
    *
    * @throws
    */
-  static async post (url, payload) {
+  static async post<R> (url: string, payload: any): Promise<SttpResponse<R>> {
     return new PendingRequest().post(url, payload)
   }
 
@@ -174,7 +186,7 @@ class Sttp {
    *
    * @throws
    */
-  static async put (url, payload) {
+  static async put<R> (url: string, payload: any): Promise<SttpResponse<R>> {
     return new PendingRequest().put(url, payload)
   }
 
@@ -188,7 +200,7 @@ class Sttp {
    *
    * @throws
    */
-  static async patch (url, payload) {
+  static async patch<R> (url: string, payload: any): Promise<SttpResponse<R>> {
     return new PendingRequest().patch(url, payload)
   }
 
@@ -202,9 +214,7 @@ class Sttp {
    *
    * @throws
    */
-  static async delete (url, queryParams) {
+  static async delete<R> (url: string, queryParams: object): Promise<SttpResponse<R>> {
     return new PendingRequest().delete(url, queryParams)
   }
 }
-
-module.exports = Sttp

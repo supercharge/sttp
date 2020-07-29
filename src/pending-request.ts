@@ -1,16 +1,29 @@
 'use strict'
 
-const Axios = require('axios')
-const Merge = require('deepmerge')
-const SttpResponse = require('./sttp-response')
+import Qs from 'querystring'
+import Merge from 'deepmerge'
+import { tap } from '@supercharge/goodies'
+import { SttpResponse } from './sttp-response'
+import Axios, { AxiosResponse, Method } from 'axios'
 
-class PendingRequest {
+type BodyFormat = 'json' | 'formParams'
+
+export class PendingRequest {
+  /**
+   * The request configuration.
+   */
+  private request: any
+
+  /**
+   * The payload format for a JSON or form-url-encoded request.
+   */
+  private bodyFormat: BodyFormat = 'json'
+
   /**
    * Createa new pending HTTP request instance.
    */
   constructor () {
-    this.options = {}
-
+    this.request = {}
     this.asJson()
   }
 
@@ -21,9 +34,9 @@ class PendingRequest {
    *
    * @returns {PendingRequest}
    */
-  withHeaders (headers) {
-    return this.tap(() => {
-      this.options = Merge(this.options, { headers })
+  withHeaders (headers: object): this {
+    return tap(this, () => {
+      this.request = Merge(this.request, { headers })
     })
   }
 
@@ -34,9 +47,9 @@ class PendingRequest {
    *
    * @returns {PendingRequest}
    */
-  withQueryParams (queryParams) {
-    return this.tap(() => {
-      this.options = Merge(this.options, { params: queryParams })
+  withQueryParams (queryParams: object): this {
+    return tap(this, () => {
+      this.request = Merge(this.request, { params: queryParams })
     })
   }
 
@@ -48,9 +61,9 @@ class PendingRequest {
    *
    * @returns {PendingRequest}
    */
-  withBasicAuth (username, password) {
-    return this.tap(() => {
-      this.options = Merge(this.options, {
+  withBasicAuth (username: string, password: string): this {
+    return tap(this, () => {
+      this.request = Merge(this.request, {
         auth: { username, password }
       })
     })
@@ -64,7 +77,7 @@ class PendingRequest {
    *
    * @returns {PendingRequest}
    */
-  withToken (token, type = 'Bearer') {
+  withToken (token: string, type: string = 'Bearer'): this {
     return this.withHeaders({
       Authorization: `${type} ${token}`.trim()
     })
@@ -77,22 +90,37 @@ class PendingRequest {
    *
    * @returns {PendingRequest}
    */
-  withOptions (options = {}) {
-    return this.tap(() => {
-      this.options = Merge(this.options, options)
+  withOptions (options = {}): this {
+    return tap(this, () => {
+      this.request = Merge(this.request, options)
     })
   }
 
   /**
-   * Add request payload.
+   * Add a request payload.
    *
-   * @param {Object} payload
+   * @param {*} payload
    *
    * @returns {PendingRequest}
    */
-  withPayload (payload) {
-    return this.tap(() => {
-      this.payload = payload
+  withPayload (payload: any): this {
+    return tap(this, () => {
+      this.request = Merge(this.request, { data: payload })
+    })
+  }
+
+  /**
+   * Define the request timeout in milliseconds.
+   *
+   * @param {Number} timeout
+   *
+   * @returns {PendingRequest}
+   */
+  withTimeout (timeout: number): this {
+    return tap(this, () => {
+      this.request = Merge(this.request, {
+        timeout: timeout * 1000
+      })
     })
   }
 
@@ -103,12 +131,8 @@ class PendingRequest {
    *
    * @returns {PendingRequest}
    */
-  timeout (timeout) {
-    return this.tap(() => {
-      this.options = Merge(this.options, {
-        timeout: timeout * 1000
-      })
-    })
+  withTimeoutInSeconds (timeout: number): this {
+    return this.withTimeout(timeout * 1000)
   }
 
   /**
@@ -116,7 +140,7 @@ class PendingRequest {
    *
    * @returns {PendingRequest}
    */
-  asJson () {
+  asJson (): this {
     return this
       .payloadFormat('json')
       .contentType('application/json')
@@ -128,7 +152,7 @@ class PendingRequest {
    *
    * @returns {PendingRequest}
    */
-  asFormParams () {
+  asFormParams (): this {
     return this
       .payloadFormat('formParams')
       .contentType('application/x-www-form-urlencoded')
@@ -141,8 +165,8 @@ class PendingRequest {
    *
    * @returns {PendingRequest}
    */
-  payloadFormat (format) {
-    return this.tap(() => {
+  payloadFormat (format: BodyFormat): this {
+    return tap(this, () => {
       this.bodyFormat = format
     })
   }
@@ -155,7 +179,7 @@ class PendingRequest {
    *
    * @returns {PendingRequest}
    */
-  accept (accept) {
+  accept (accept: string): this {
     return this.withHeaders({
       Accept: accept
     })
@@ -169,34 +193,21 @@ class PendingRequest {
    *
    * @returns {PendingRequest}
    */
-  acceptJson () {
+  acceptJson (): this {
     return this.accept('application/json')
   }
 
   /**
    * Set the `Content-Type` request header.
    *
-   * @param {String} accept
+   * @param {String} contentType
    *
    * @returns {PendingRequest}
    */
-  contentType (contentType) {
+  contentType (contentType: string): this {
     return this.withHeaders({
       'Content-Type': contentType
     })
-  }
-
-  /**
-   * Run the given `callback` before returning `this`.
-   *
-   * @param {Function} callback
-   *
-   * @returns {PendingRequest}
-   */
-  tap (callback) {
-    callback()
-
-    return this
   }
 
   /**
@@ -209,10 +220,10 @@ class PendingRequest {
    *
    * @throws
    */
-  async get (url, queryParams = {}) {
+  async get<R> (url: string, queryParams: object = {}): Promise<SttpResponse<R>> {
     return this
       .withQueryParams(queryParams)
-      .send('GET', url)
+      .send<R>('GET', url)
   }
 
   /**
@@ -225,10 +236,10 @@ class PendingRequest {
    *
    * @throws
    */
-  async post (url, payload = {}) {
+  async post<R> (url: string, payload = {}): Promise<SttpResponse<R>> {
     return this
       .withPayload(payload)
-      .send('POST', url)
+      .send<R>('POST', url)
   }
 
   /**
@@ -241,10 +252,10 @@ class PendingRequest {
    *
    * @throws
    */
-  async put (url, payload = {}) {
+  async put<R> (url: string, payload = {}): Promise<SttpResponse<R>> {
     return this
       .withPayload(payload)
-      .send('PUT', url)
+      .send<R>('PUT', url)
   }
 
   /**
@@ -257,10 +268,10 @@ class PendingRequest {
    *
    * @throws
    */
-  async patch (url, payload = {}) {
+  async patch<R> (url: string, payload = {}): Promise<SttpResponse<R>> {
     return this
       .withPayload(payload)
-      .send('PATCH', url)
+      .send<R>('PATCH', url)
   }
 
   /**
@@ -273,10 +284,10 @@ class PendingRequest {
    *
    * @throws
    */
-  async delete (url, queryParams = {}) {
+  async delete<R> (url: string, queryParams = {}): Promise<SttpResponse<R>> {
     return this
       .withQueryParams(queryParams)
-      .send('DELETE', url)
+      .send<R>('DELETE', url)
   }
 
   /**
@@ -289,14 +300,14 @@ class PendingRequest {
    *
    * @throws
    */
-  async send (method, url) {
+  async send<R> (method: string, url: string): Promise<SttpResponse<R>> {
     try {
-      return new SttpResponse(
-        await this.createAndSendRequest(method, url)
+      return new SttpResponse<R>(
+        await this.createAndSendRequest(method as Method, url)
       )
     } catch (error) {
       if (error.request) {
-        throw new Error('Failed to send request', error.request)
+        throw error
       }
 
       return new SttpResponse(error.response)
@@ -311,14 +322,26 @@ class PendingRequest {
    *
    * @returns {Request}
    */
-  async createAndSendRequest (method, url) {
+  async createAndSendRequest (method: Method, url: string): Promise<AxiosResponse> {
     return Axios({
       url,
       method,
       withCredentials: true,
-      ...this.options
+      ...this.request,
+      data: this.prepareRequestPayload()
     })
   }
-}
 
-module.exports = PendingRequest
+  /**
+   * Returns the request payload depending on the selected request payload format.
+   */
+  prepareRequestPayload (): any {
+    if (this.bodyFormat === 'formParams') {
+      return Qs.stringify(
+        this.request.payload
+      )
+    }
+
+    return this.request.payload
+  }
+}

@@ -1,12 +1,19 @@
 'use strict'
 
-class SttpResponse {
+import { AxiosResponse } from 'axios'
+
+export class SttpResponse<T = any> {
   /**
-   * Create a new SttpResponse instance.
-   *
-   * @param {Object} response
+   * The Axios response object.
    */
-  constructor (response) {
+  private readonly response: AxiosResponse
+
+  /**
+   * Wrap the given Axios `response` into a new response instance.
+   *
+   * @param {AxiosResponse} response
+   */
+  constructor (response: AxiosResponse) {
     this.response = response
   }
 
@@ -15,7 +22,7 @@ class SttpResponse {
    *
    * @returns {Number}
    */
-  get status () {
+  status (): number {
     return this.response.status
   }
 
@@ -24,7 +31,7 @@ class SttpResponse {
    *
    * @returns {*}
    */
-  get data () {
+  data (): T {
     return this.payload()
   }
 
@@ -33,8 +40,8 @@ class SttpResponse {
    *
    * @returns {Object}
    */
-  get headers () {
-    return this.response.status
+  headers (): Object {
+    return this.response.headers
   }
 
   /**
@@ -42,7 +49,7 @@ class SttpResponse {
    *
    * @returns {*}
    */
-  payload () {
+  payload (): T {
     return this.response.data
   }
 
@@ -51,7 +58,7 @@ class SttpResponse {
    *
    * @returns {Boolean}
    */
-  isSuccess () {
+  isSuccess (): boolean {
     return this.response.status >= 200 && this.response.status < 300
   }
 
@@ -60,7 +67,7 @@ class SttpResponse {
    *
    * @returns {Boolean}
    */
-  isRedirect () {
+  isRedirect (): boolean {
     return this.response.status >= 300 && this.response.status < 400
   }
 
@@ -69,7 +76,7 @@ class SttpResponse {
    *
    * @returns {Boolean}
    */
-  isClientError () {
+  isClientError (): boolean {
     return this.response.status >= 400 && this.response.status < 500
   }
 
@@ -78,9 +85,7 @@ class SttpResponse {
    *
    * @returns {Boolean}
    */
-  isServerError () {
+  isServerError (): boolean {
     return this.response.status >= 500
   }
 }
-
-module.exports = SttpResponse
