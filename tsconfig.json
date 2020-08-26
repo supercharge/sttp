@@ -1,7 +1,11 @@
 {
   "extends": "@supercharge/tsconfig",
   "compilerOptions": {
-    "outDir": "./dist"
+    "outDir": "./dist",
+    "lib": [
+      "ES2017",
+      "DOM"
+    ]
   },
   "include": [
     "./**/*"
