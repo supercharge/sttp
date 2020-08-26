@@ -21,4 +21,13 @@ describe('Sttp', () => {
     expect(response.status()).to.equal(200)
     expect(response.payload()).to.equal('Success')
   })
+
+  it('sends a get request with headers', async () => {
+    const response = await Sttp.withHeaders({
+      name: 'Marcus'
+    }).get('http://localhost:4000/with-headers')
+
+    expect(response.status()).to.equal(200)
+    expect(response.payload()).to.include({ name: 'Marcus' })
+  })
 })

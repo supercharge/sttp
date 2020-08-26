@@ -30,6 +30,13 @@ class TestServer {
         handler: () => {
           return 'Success'
         }
+      },
+      {
+        method: 'GET',
+        path: '/with-headers',
+        handler: request => {
+          return request.headers
+        }
       }
     ])
 
