@@ -7,7 +7,7 @@ class TestServer {
     if (!this._server) {
       this._server = new Hapi.Server({
         host: 'localhost',
-        port: 4000
+        port: 2020
       })
     }
 
