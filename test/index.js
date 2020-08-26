@@ -3,6 +3,8 @@
 const Sttp = require('..')
 const Server = require('./test-server')
 
+const baseUrl = 'http://localhost:2020'
+
 describe('Sttp', () => {
   beforeAll(async () => {
     await Server.start()
@@ -13,7 +15,7 @@ describe('Sttp', () => {
   })
 
   it('sends a get request', async () => {
-    const response = await Sttp.get('http://localhost:4000/')
+    const response = await Sttp.get(baseUrl)
     expect(response.status()).toEqual(200)
     expect(response.payload()).toEqual('Success')
   })
@@ -21,7 +23,7 @@ describe('Sttp', () => {
   it('sends a get request with headers', async () => {
     const response = await Sttp.withHeaders({
       name: 'Marcus'
-    }).get('http://localhost:4000/with-headers')
+    }).get(`${baseUrl}/with-headers`)
 
     expect(response.status()).toEqual(200)
     expect(response.payload()).toMatchObject({ name: 'Marcus' })
