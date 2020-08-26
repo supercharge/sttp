@@ -1,25 +1,21 @@
 'use strict'
 
 const Sttp = require('..')
-const Lab = require('@hapi/lab')
 const Server = require('./test-server')
-const { expect } = require('@hapi/code')
-
-const { describe, it, before, after } = (exports.lab = Lab.script())
 
 describe('Sttp', () => {
-  before(async () => {
+  beforeAll(async () => {
     await Server.start()
   })
 
-  after(async () => {
+  afterAll(async () => {
     await Server.stop()
   })
 
   it('sends a get request', async () => {
     const response = await Sttp.get('http://localhost:4000/')
-    expect(response.status()).to.equal(200)
-    expect(response.payload()).to.equal('Success')
+    expect(response.status()).toEqual(200)
+    expect(response.payload()).toEqual('Success')
   })
 
   it('sends a get request with headers', async () => {
@@ -27,7 +23,7 @@ describe('Sttp', () => {
       name: 'Marcus'
     }).get('http://localhost:4000/with-headers')
 
-    expect(response.status()).to.equal(200)
-    expect(response.payload()).to.include({ name: 'Marcus' })
+    expect(response.status()).toEqual(200)
+    expect(response.payload()).toMatchObject({ name: 'Marcus' })
   })
 })
