@@ -12,25 +12,29 @@
   },
   "devDependencies": {
     "@hapi/hapi": "~20.2.1",
-    "@supercharge/tsconfig": "~3.1.0",
+    "@supercharge/tsconfig": "~2.0.0",
     "@types/jest": "~27.0.2",
     "@typescript-eslint/eslint-plugin": "~4.33.0",
+    "c8": "~7.10.0",
     "eslint": "~7.32.0",
     "eslint-config-standard-with-typescript": "~21.0.1",
     "eslint-plugin-import": "~2.25.2",
     "eslint-plugin-node": "~11.1.0",
     "eslint-plugin-promise": "~5.1.1",
     "eslint-plugin-standard": "~4.1.0",
+    "expect": "~27.3.1",
     "jest": "~27.3.1",
-    "typescript": "~4.4.4"
+    "typescript": "~4.4.4",
+    "uvu": "~0.5.2"
   },
   "engines": {
     "node": ">=8"
   },
   "files": [
-    "dist",
-    "index.js"
+    "dist"
   ],
+  "main": "dist",
+  "types": "dist",
   "homepage": "https://github.com/supercharge/sttp",
   "keywords": [
     "nodejs",
@@ -40,7 +44,6 @@
     "superchargejs"
   ],
   "license": "MIT",
-  "main": "index.js",
   "publishConfig": {
     "access": "public"
   },
@@ -53,8 +56,9 @@
     "dev": "tsc --watch",
     "lint": "eslint src --ext .js,.ts",
     "lint:fix": "npm run lint -- --fix",
-    "test": "npm run build && npm run lint && npm run test:run",
-    "test:run": "jest"
-  },
-  "types": "dist"
+    "test": "npm run build && npm run lint && npm run test:coverage",
+    "test:run": "uvu",
+    "test:coverage": "c8 --include=dist npm run test:run && npm run test:report",
+    "test:report": "c8 report --reporter=html"
+  }
 }
