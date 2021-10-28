@@ -1,9 +1,8 @@
 'use strict'
 
-import Qs from 'querystring'
 import Merge from 'deepmerge'
 import { SttpResponse } from './sttp-response'
-import Axios, { AxiosResponse, Method } from 'axios'
+import Axios, { AxiosInstance, AxiosResponse, Method } from 'axios'
 
 type BodyFormat = 'json' | 'formParams'
 
@@ -12,6 +11,11 @@ export class PendingRequest {
    * The request configuration.
    */
   private request: any
+
+  /**
+   * The request configuration.
+   */
+  private readonly axios: AxiosInstance
 
   /**
    * The payload format for a JSON or form-url-encoded request.
@@ -24,6 +28,7 @@ export class PendingRequest {
   constructor () {
     this.request = {}
     this.asJson()
+    this.axios = Axios.create()
   }
 
   /**
@@ -322,7 +327,7 @@ export class PendingRequest {
    * @returns {Request}
    */
   async createAndSendRequest (method: Method, url: string): Promise<AxiosResponse> {
-    return Axios({
+    return this.axios({
       url,
       method,
       withCredentials: true,
@@ -335,12 +340,8 @@ export class PendingRequest {
    * Returns the request payload depending on the selected request payload format.
    */
   prepareRequestPayload (): any {
-    if (this.bodyFormat === 'formParams') {
-      return Qs.stringify(
-        this.request.payload
-      )
-    }
-
-    return this.request.payload
+    return this.bodyFormat === 'formParams'
+      ? new URLSearchParams(this.request.payload).toString()
+      : this.request.payload
   }
 }
