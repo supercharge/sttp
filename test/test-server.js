@@ -1,46 +1,48 @@
 'use strict'
 
-const Hapi = require('@hapi/hapi')
+const Koa = require('koa')
 
 class TestServer {
-  static get server () {
-    if (!this._server) {
-      this._server = new Hapi.Server({
-        host: 'localhost',
-        port: 2020
-      })
-    }
-
-    return this._server
+  constructor () {
+    this.koa = new Koa()
+    this.server = undefined
   }
 
-  static async start () {
-    await this.addRoutes().server.start()
+  static port () {
+    return 2021
   }
 
-  static async stop () {
-    await this.server.stop()
+  static create () {
+    return new this()
   }
 
-  static addRoutes () {
-    this.server.route([
-      {
-        method: 'GET',
-        path: '/',
-        handler: () => {
-          return 'Success'
-        }
-      },
-      {
-        method: 'GET',
-        path: '/with-headers',
-        handler: request => {
-          return request.headers
-        }
-      }
-    ])
+  /**
+   * Add the given middleware `handler` to the Koa server instance.
+   *
+   * @param {Koa.Middleware} handler
+   *
+   * @returns {this}
+   */
+  withMiddleware (handler) {
+    this.koa.use(handler)
 
     return this
+  }
+
+  async start () {
+    await new Promise(resolve => {
+      this.server = this.koa.listen(TestServer.port(), () => resolve())
+    })
+  }
+
+  async stop () {
+    if (!this.server) {
+      return
+    }
+
+    await new Promise(resolve => {
+      this.server.close(() => resolve())
+    })
   }
 }
 

@@ -5,20 +5,28 @@ const expect = require('expect')
 const { Sttp } = require('../dist')
 const Server = require('./test-server')
 
-const baseUrl = 'http://localhost:2020'
+let server
+const baseUrl = `http://localhost:${Server.port()}`
 
 test.before(async () => {
-  await Server.start()
+  server = Server.create().withMiddleware(ctx => {
+    ctx.response.body = {
+      headers: ctx.request.headers,
+      payload: ctx.body,
+      query: ctx.request.query
+    }
+  })
+
+  await server.start()
 })
 
 test.after(async () => {
-  await Server.stop()
+  await server.stop()
 })
 
 test('sends a get request', async () => {
   const response = await Sttp.get(baseUrl)
   expect(response.status()).toEqual(200)
-  expect(response.payload()).toEqual('Success')
 })
 
 test('sends a get request with headers', async () => {
@@ -27,7 +35,7 @@ test('sends a get request with headers', async () => {
   }).get(`${baseUrl}/with-headers`)
 
   expect(response.status()).toEqual(200)
-  expect(response.payload()).toMatchObject({ name: 'Marcus' })
+  expect(response.payload()).toMatchObject({ headers: { name: 'Marcus' } })
 })
 
 test.run()
