@@ -1,6 +1,6 @@
 'use strict'
 
-const Sttp = require('..')
+const { Sttp } = require('../dist')
 const Server = require('./test-server')
 
 const baseUrl = 'http://localhost:2020'
