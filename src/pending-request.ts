@@ -2,7 +2,6 @@
 
 import Qs from 'querystring'
 import Merge from 'deepmerge'
-import { tap } from '@supercharge/goodies'
 import { SttpResponse } from './sttp-response'
 import Axios, { AxiosResponse, Method } from 'axios'
 
@@ -35,9 +34,9 @@ export class PendingRequest {
    * @returns {PendingRequest}
    */
   withHeaders (headers: object): this {
-    return tap(this, () => {
-      this.request = Merge(this.request, { headers })
-    })
+    this.request = Merge(this.request, { headers })
+
+    return this
   }
 
   /**
@@ -48,9 +47,9 @@ export class PendingRequest {
    * @returns {PendingRequest}
    */
   withQueryParams (queryParams: object): this {
-    return tap(this, () => {
-      this.request = Merge(this.request, { params: queryParams })
-    })
+    this.request = Merge(this.request, { params: queryParams })
+
+    return this
   }
 
   /**
@@ -62,11 +61,11 @@ export class PendingRequest {
    * @returns {PendingRequest}
    */
   withBasicAuth (username: string, password: string): this {
-    return tap(this, () => {
-      this.request = Merge(this.request, {
-        auth: { username, password }
-      })
+    this.request = Merge(this.request, {
+      auth: { username, password }
     })
+
+    return this
   }
 
   /**
@@ -91,9 +90,9 @@ export class PendingRequest {
    * @returns {PendingRequest}
    */
   withOptions (options = {}): this {
-    return tap(this, () => {
-      this.request = Merge(this.request, options)
-    })
+    this.request = Merge(this.request, options)
+
+    return this
   }
 
   /**
@@ -104,9 +103,9 @@ export class PendingRequest {
    * @returns {PendingRequest}
    */
   withPayload (payload: any): this {
-    return tap(this, () => {
-      this.request = Merge(this.request, { data: payload })
-    })
+    this.request = Merge(this.request, { data: payload })
+
+    return this
   }
 
   /**
@@ -117,11 +116,11 @@ export class PendingRequest {
    * @returns {PendingRequest}
    */
   withTimeout (timeout: number): this {
-    return tap(this, () => {
-      this.request = Merge(this.request, {
-        timeout: timeout * 1000
-      })
+    this.request = Merge(this.request, {
+      timeout: timeout * 1000
     })
+
+    return this
   }
 
   /**
@@ -166,9 +165,9 @@ export class PendingRequest {
    * @returns {PendingRequest}
    */
   payloadFormat (format: BodyFormat): this {
-    return tap(this, () => {
-      this.bodyFormat = format
-    })
+    this.bodyFormat = format
+
+    return this
   }
 
   /**
@@ -305,7 +304,7 @@ export class PendingRequest {
       return new SttpResponse<R>(
         await this.createAndSendRequest(method as Method, url)
       )
-    } catch (error) {
+    } catch (error: any) {
       if (error.request) {
         throw error
       }
