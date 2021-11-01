@@ -133,7 +133,7 @@ export class Sttp {
    *
    * @returns {PendingRequest}
    */
-  acceptJson (): PendingRequest {
+  static acceptJson (): PendingRequest {
     return new PendingRequest().acceptJson()
   }
 
