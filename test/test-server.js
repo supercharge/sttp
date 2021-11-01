@@ -1,11 +1,17 @@
 'use strict'
 
 const Koa = require('koa')
+const KoaBody = require('koa-body')
 
 class TestServer {
   constructor () {
-    this.koa = new Koa()
     this.server = undefined
+    this.koa = new Koa()
+
+    this.withMiddleware(KoaBody({
+      multipart: true,
+      jsonStrict: false
+    }))
   }
 
   static port () {
