@@ -27,8 +27,9 @@ export class PendingRequest {
    */
   constructor () {
     this.request = {}
-    this.asJson()
     this.axios = Axios.create()
+
+    this.asJson()
   }
 
   /**
@@ -108,7 +109,7 @@ export class PendingRequest {
    * @returns {PendingRequest}
    */
   withPayload (payload: any): this {
-    this.request = Merge(this.request, { data: payload })
+    this.request = Merge(this.request, { payload })
 
     return this
   }
@@ -327,7 +328,7 @@ export class PendingRequest {
    * @returns {Request}
    */
   async createAndSendRequest (method: Method, url: string): Promise<AxiosResponse> {
-    return this.axios({
+    return await this.axios({
       url,
       method,
       withCredentials: true,
