@@ -29,7 +29,7 @@ test('sends a get request', async () => {
   expect(response.status()).toEqual(200)
 })
 
-test('sends a get request with headers', async () => {
+test('.withHeaders()', async () => {
   const response = await Sttp
     .withHeaders({ name: 'Supercharge' })
     .get(`${baseUrl}/with-headers`)
@@ -38,7 +38,7 @@ test('sends a get request with headers', async () => {
   expect(response.payload()).toMatchObject({ headers: { name: 'Supercharge' } })
 })
 
-test('Sttp.withQueryParams()', async () => {
+test('.withQueryParams()', async () => {
   const response = await Sttp
     .withQueryParams({ name: 'Supercharge' })
     .get(`${baseUrl}/with-query-params`)
@@ -47,7 +47,7 @@ test('Sttp.withQueryParams()', async () => {
   expect(response.payload()).toMatchObject({ query: { name: 'Supercharge' } })
 })
 
-test('Sttp.withToken()', async () => {
+test('.withToken()', async () => {
   const response = await Sttp
     .withToken('token')
     .get(`${baseUrl}/with-query-params`)
@@ -58,7 +58,7 @@ test('Sttp.withToken()', async () => {
   })
 })
 
-test('Sttp.withToken() and type', async () => {
+test('.withToken() and type', async () => {
   const response = await Sttp
     .withToken('token', 'X-Bearer')
     .get(`${baseUrl}/with-query-params`)
