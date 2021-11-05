@@ -218,4 +218,18 @@ export class Sttp {
   static async delete<R> (url: string, queryParams: object): Promise<SttpResponse<R>> {
     return new PendingRequest().delete(url, queryParams)
   }
+
+  /**
+   * Send an HTTP OPTIONS request, optionally with the given `queryParams`.
+   *
+   * @param {String} url
+   * @param {Object} queryParams
+   *
+   * @returns {SttpResponse}
+   *
+   * @throws
+   */
+  static async options<R> (url: string, queryParams: object): Promise<SttpResponse<R>> {
+    return new PendingRequest().options(url, queryParams)
+  }
 }
