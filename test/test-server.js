@@ -35,9 +35,9 @@ class TestServer {
     return this
   }
 
-  async start () {
+  async start (port) {
     await new Promise(resolve => {
-      this.server = this.koa.listen(TestServer.port(), () => resolve())
+      this.server = this.koa.listen(port || TestServer.port(), () => resolve())
     })
   }
 
