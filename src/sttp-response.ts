@@ -1,8 +1,8 @@
 'use strict'
 
-import { AxiosResponse } from 'axios'
+import { AxiosResponse, AxiosResponseHeaders } from 'axios'
 
-export class SttpResponse<T = any> {
+export class SttpResponse {
   /**
    * The Axios response object.
    */
@@ -27,12 +27,21 @@ export class SttpResponse<T = any> {
   }
 
   /**
+   * Returns the response payload. This method is an alias for `response.payload()`.
+   *
+   * @returns {*}
+   */
+  data<T = any> (): T {
+    return this.payload()
+  }
+
+  /**
    * Returns the response payload.
    *
    * @returns {*}
    */
-  data (): T {
-    return this.payload()
+  payload<T = any> (): T {
+    return this.response.data
   }
 
   /**
@@ -40,17 +49,8 @@ export class SttpResponse<T = any> {
    *
    * @returns {Object}
    */
-  headers (): Object {
+  headers (): AxiosResponseHeaders {
     return this.response.headers
-  }
-
-  /**
-   * Returns the response payload.
-   *
-   * @returns {*}
-   */
-  payload (): T {
-    return this.response.data
   }
 
   /**
@@ -69,6 +69,15 @@ export class SttpResponse<T = any> {
    */
   isRedirect (): boolean {
     return this.response.status >= 300 && this.response.status < 400
+  }
+
+  /**
+   * Determine whether the response is an error (status 4xx or 5xx).
+   *
+   * @returns {Boolean}
+   */
+  isError (): boolean {
+    return this.isClientError() || this.isServerError()
   }
 
   /**
