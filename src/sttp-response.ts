@@ -2,7 +2,7 @@
 
 import { AxiosResponse, AxiosResponseHeaders } from 'axios'
 
-export class SttpResponse {
+export class SttpResponse<ResponseType = any> {
   /**
    * The Axios response object.
    */
@@ -31,7 +31,7 @@ export class SttpResponse {
    *
    * @returns {*}
    */
-  data<T = any> (): T {
+  data<T = ResponseType> (): T {
     return this.payload()
   }
 
@@ -40,7 +40,7 @@ export class SttpResponse {
    *
    * @returns {*}
    */
-  payload<T = any> (): T {
+  payload<T = ResponseType> (): T {
     return this.response.data
   }
 
