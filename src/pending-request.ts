@@ -2,7 +2,7 @@
 
 import Merge from 'deepmerge'
 import { SttpResponse } from './sttp-response'
-import Axios, { AxiosInstance, AxiosRequestConfig, AxiosRequestHeaders, AxiosResponse, Method } from 'axios'
+import Axios, { AxiosInstance, AxiosRequestConfig, AxiosRequestHeaders, AxiosResponse } from 'axios'
 
 export class PendingRequest {
   /**
@@ -28,6 +28,15 @@ export class PendingRequest {
     this.axios = Axios.create()
 
     this.asJson()
+  }
+
+  /**
+   * Returns the Axios request config.
+   *
+   * @returns {AxiosRequestConfig}
+   */
+  requestConfig (): AxiosRequestConfig {
+    return this.request
   }
 
   /**
@@ -100,7 +109,7 @@ export class PendingRequest {
   /**
    * Add a request payload.
    *
-   * @param {*} payload
+   * @param {*} data
    *
    * @returns {PendingRequest}
    */
@@ -216,9 +225,11 @@ export class PendingRequest {
    * @throws
    */
   async get<R> (url: string, queryParams: object = {}): Promise<SttpResponse<R>> {
-    return this
-      .withQueryParams(queryParams)
-      .send<R>('GET', url)
+    if (queryParams) {
+      this.withQueryParams(queryParams)
+    }
+
+    return this.send<R>('GET', url)
   }
 
   /**
@@ -232,9 +243,11 @@ export class PendingRequest {
    * @throws
    */
   async post<R> (url: string, payload: any): Promise<SttpResponse<R>> {
-    return this
-      .withPayload(payload)
-      .send<R>('POST', url)
+    if (payload) {
+      this.withPayload(payload)
+    }
+
+    return this.send<R>('POST', url)
   }
 
   /**
@@ -248,9 +261,11 @@ export class PendingRequest {
    * @throws
    */
   async put<R> (url: string, payload: any): Promise<SttpResponse<R>> {
-    return this
-      .withPayload(payload)
-      .send<R>('PUT', url)
+    if (payload) {
+      this.withPayload(payload)
+    }
+
+    return this.send<R>('PUT', url)
   }
 
   /**
@@ -264,9 +279,11 @@ export class PendingRequest {
    * @throws
    */
   async patch<R> (url: string, payload: any): Promise<SttpResponse<R>> {
-    return this
-      .withPayload(payload)
-      .send<R>('PATCH', url)
+    if (payload) {
+      this.withPayload(payload)
+    }
+
+    return this.send<R>('PATCH', url)
   }
 
   /**
@@ -280,9 +297,29 @@ export class PendingRequest {
    * @throws
    */
   async delete<R> (url: string, queryParams = {}): Promise<SttpResponse<R>> {
-    return this
-      .withQueryParams(queryParams)
-      .send<R>('DELETE', url)
+    if (queryParams) {
+      this.withQueryParams(queryParams)
+    }
+
+    return this.send<R>('DELETE', url)
+  }
+
+  /**
+   * Send an HTTP OPTIONS request, optionally with the given `queryParams`.
+   *
+   * @param {String} url
+   * @param {Object} queryParams
+   *
+   * @returns {SttpResponse}
+   *
+   * @throws
+   */
+  async options<R> (url: string, queryParams = {}): Promise<SttpResponse<R>> {
+    if (queryParams) {
+      this.withQueryParams(queryParams)
+    }
+
+    return this.send<R>('OPTIONS', url)
   }
 
   /**
@@ -298,7 +335,7 @@ export class PendingRequest {
   async send<R> (method: HttpMethod, url: string): Promise<SttpResponse<R>> {
     try {
       return new SttpResponse<R>(
-        await this.createAndSendRequest(method as Method, url)
+        await this.createAndSendRequest(method, url)
       )
     } catch (error: any) {
       if (error.request) {
@@ -317,7 +354,7 @@ export class PendingRequest {
    *
    * @returns {Request}
    */
-  async createAndSendRequest (method: Method, url: string): Promise<AxiosResponse> {
+  async createAndSendRequest (method: HttpMethod, url: string): Promise<AxiosResponse> {
     return await this.axios({
       url,
       method,
