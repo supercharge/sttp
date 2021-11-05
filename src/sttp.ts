@@ -1,5 +1,6 @@
 'use strict'
 
+import { AxiosRequestHeaders } from 'axios'
 import { SttpResponse } from './sttp-response'
 import { PendingRequest } from './pending-request'
 
@@ -11,7 +12,7 @@ export class Sttp {
    *
    * @returns {PendingRequest}
    */
-  static withHeaders (headers: object): PendingRequest {
+  static withHeaders (headers: AxiosRequestHeaders): PendingRequest {
     return new PendingRequest().withHeaders(headers)
   }
 

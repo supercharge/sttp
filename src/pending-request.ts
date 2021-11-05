@@ -2,15 +2,13 @@
 
 import Merge from 'deepmerge'
 import { SttpResponse } from './sttp-response'
-import Axios, { AxiosInstance, AxiosResponse, Method } from 'axios'
-
-type BodyFormat = 'json' | 'formParams'
+import Axios, { AxiosInstance, AxiosRequestConfig, AxiosRequestHeaders, AxiosResponse, Method } from 'axios'
 
 export class PendingRequest {
   /**
    * The request configuration.
    */
-  private request: any
+  private request: AxiosRequestConfig
 
   /**
    * The request configuration.
@@ -39,7 +37,7 @@ export class PendingRequest {
    *
    * @returns {PendingRequest}
    */
-  withHeaders (headers: object): this {
+  withHeaders (headers: AxiosRequestHeaders): this {
     this.request = Merge(this.request, { headers })
 
     return this
@@ -67,9 +65,7 @@ export class PendingRequest {
    * @returns {PendingRequest}
    */
   withBasicAuth (username: string, password: string): this {
-    this.request = Merge(this.request, {
-      auth: { username, password }
-    })
+    this.request.auth = { username, password }
 
     return this
   }
@@ -95,7 +91,7 @@ export class PendingRequest {
    *
    * @returns {PendingRequest}
    */
-  withOptions (options = {}): this {
+  withOptions<D = any> (options: AxiosRequestConfig<D> = {}): this {
     this.request = Merge(this.request, options)
 
     return this
@@ -108,29 +104,27 @@ export class PendingRequest {
    *
    * @returns {PendingRequest}
    */
-  withPayload (payload: any): this {
-    this.request = Merge(this.request, { payload })
+  withPayload (data: any): this {
+    this.request.data = data
 
     return this
   }
 
   /**
-   * Define the request timeout in milliseconds.
+   * Define the request `timeout` in milliseconds.
    *
    * @param {Number} timeout
    *
    * @returns {PendingRequest}
    */
   withTimeout (timeout: number): this {
-    this.request = Merge(this.request, {
-      timeout: timeout * 1000
-    })
+    this.request.timeout = timeout
 
     return this
   }
 
   /**
-   * Define the request timeout in seconds.
+   * Define the request `timeout` in seconds.
    *
    * @param {Number} timeout
    *
@@ -185,9 +179,7 @@ export class PendingRequest {
    * @returns {PendingRequest}
    */
   accept (accept: string): this {
-    return this.withHeaders({
-      Accept: accept
-    })
+    return this.withHeaders({ Accept: accept })
   }
 
   /**
@@ -210,9 +202,7 @@ export class PendingRequest {
    * @returns {PendingRequest}
    */
   contentType (contentType: string): this {
-    return this.withHeaders({
-      'Content-Type': contentType
-    })
+    return this.withHeaders({ 'Content-Type': contentType })
   }
 
   /**
@@ -241,7 +231,7 @@ export class PendingRequest {
    *
    * @throws
    */
-  async post<R> (url: string, payload = {}): Promise<SttpResponse<R>> {
+  async post<R> (url: string, payload: any): Promise<SttpResponse<R>> {
     return this
       .withPayload(payload)
       .send<R>('POST', url)
@@ -257,7 +247,7 @@ export class PendingRequest {
    *
    * @throws
    */
-  async put<R> (url: string, payload = {}): Promise<SttpResponse<R>> {
+  async put<R> (url: string, payload: any): Promise<SttpResponse<R>> {
     return this
       .withPayload(payload)
       .send<R>('PUT', url)
@@ -273,7 +263,7 @@ export class PendingRequest {
    *
    * @throws
    */
-  async patch<R> (url: string, payload = {}): Promise<SttpResponse<R>> {
+  async patch<R> (url: string, payload: any): Promise<SttpResponse<R>> {
     return this
       .withPayload(payload)
       .send<R>('PATCH', url)
@@ -305,7 +295,7 @@ export class PendingRequest {
    *
    * @throws
    */
-  async send<R> (method: string, url: string): Promise<SttpResponse<R>> {
+  async send<R> (method: HttpMethod, url: string): Promise<SttpResponse<R>> {
     try {
       return new SttpResponse<R>(
         await this.createAndSendRequest(method as Method, url)
@@ -342,7 +332,11 @@ export class PendingRequest {
    */
   prepareRequestPayload (): any {
     return this.bodyFormat === 'formParams'
-      ? new URLSearchParams(this.request.payload).toString()
-      : this.request.payload
+      ? new URLSearchParams(this.request.data).toString()
+      : this.request.data
   }
 }
+
+type BodyFormat = 'json' | 'formParams'
+
+type HttpMethod = 'GET' | 'HEAD' | 'POST' | 'PUT' | 'DELETE' | 'PATCH' | 'OPTIONS'
