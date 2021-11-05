@@ -29,6 +29,85 @@ test('sends a get request', async () => {
   expect(response.status()).toEqual(200)
 })
 
+test('sends a get request with params', async () => {
+  const response = await Sttp.get(baseUrl, { name: 'Supercharge' })
+
+  expect(response.status()).toEqual(200)
+  expect(response.payload()).toMatchObject({
+    query: { name: 'Supercharge' }
+  })
+})
+
+test('sends a post request', async () => {
+  const response = await Sttp.post(baseUrl)
+  expect(response.status()).toEqual(200)
+})
+
+test('sends a post request with payload', async () => {
+  const response = await Sttp.post(baseUrl, { name: 'Supercharge' })
+
+  expect(response.status()).toEqual(200)
+  expect(response.payload()).toMatchObject({
+    payload: { name: 'Supercharge' }
+  })
+})
+
+test('sends a put request', async () => {
+  const response = await Sttp.put(baseUrl)
+  expect(response.status()).toEqual(200)
+})
+
+test('sends a put request with payload', async () => {
+  const response = await Sttp.put(baseUrl, { name: 'Supercharge' })
+
+  expect(response.status()).toEqual(200)
+  expect(response.payload()).toMatchObject({
+    payload: { name: 'Supercharge' }
+  })
+})
+
+test('sends a delete request', async () => {
+  const response = await Sttp.delete(baseUrl)
+  expect(response.status()).toEqual(200)
+})
+
+test('sends a delete request with query params', async () => {
+  const response = await Sttp.delete(baseUrl, { name: 'Supercharge' })
+
+  expect(response.status()).toEqual(200)
+  expect(response.payload()).toMatchObject({
+    query: { name: 'Supercharge' }
+  })
+})
+
+test('sends a patch request', async () => {
+  const response = await Sttp.patch(baseUrl)
+  expect(response.status()).toEqual(200)
+})
+
+test('sends a patch request with query params', async () => {
+  const response = await Sttp.patch(baseUrl, { name: 'Supercharge' })
+
+  expect(response.status()).toEqual(200)
+  expect(response.payload()).toMatchObject({
+    payload: { name: 'Supercharge' }
+  })
+})
+
+test('sends an options request', async () => {
+  const response = await Sttp.options(baseUrl)
+  expect(response.status()).toEqual(200)
+})
+
+test('sends an options request with query params', async () => {
+  const response = await Sttp.options(baseUrl, { name: 'Supercharge' })
+
+  expect(response.status()).toEqual(200)
+  expect(response.payload()).toMatchObject({
+    query: { name: 'Supercharge' }
+  })
+})
+
 test('.withHeaders()', async () => {
   const response = await Sttp
     .withHeaders({ name: 'Supercharge' })
@@ -45,6 +124,97 @@ test('.withQueryParams()', async () => {
 
   expect(response.status()).toEqual(200)
   expect(response.payload()).toMatchObject({ query: { name: 'Supercharge' } })
+})
+
+test('.withPayload()', async () => {
+  const responseForGetRequest = await Sttp
+    .withPayload({ name: 'Supercharge' })
+    .get(`${baseUrl}/with-payload`)
+
+  expect(responseForGetRequest.status()).toEqual(200)
+  expect(responseForGetRequest.payload()).toMatchObject({ query: {}, payload: {} })
+
+  const responseForPostRequest = await Sttp
+    .withPayload({ name: 'Supercharge' })
+    .post(`${baseUrl}/with-payload`)
+
+  expect(responseForPostRequest.payload()).toMatchObject({ payload: { name: 'Supercharge' } })
+})
+
+test('.withBasicAuth(): username', async () => {
+  const config = await Sttp
+    .withBasicAuth('username')
+    .requestConfig()
+
+  expect(config.auth).toEqual({ username: 'username', password: undefined })
+
+  const response = await Sttp
+    .withBasicAuth('username')
+    .get(`${baseUrl}/with-basic-auth`)
+
+  expect(response.status()).toEqual(200)
+  expect(response.payload()).toMatchObject({ headers: { authorization: 'Basic dXNlcm5hbWU6' } })
+})
+
+test('.withBasicAuth(): password', async () => {
+  const config = await Sttp
+    .withBasicAuth(undefined, 'password')
+    .requestConfig()
+
+  expect(config.auth).toEqual({ username: undefined, password: 'password' })
+
+  const response = await Sttp
+    .withBasicAuth(undefined, 'password')
+    .get(`${baseUrl}/with-basic-auth`)
+
+  expect(response.status()).toEqual(200)
+  expect(response.payload()).toMatchObject({ headers: { authorization: 'Basic OnBhc3N3b3Jk' } })
+})
+
+test('.withBasicAuth(): username and password', async () => {
+  const config = await Sttp
+    .withBasicAuth(undefined, 'password')
+    .requestConfig()
+
+  expect(config.auth).toEqual({ username: undefined, password: 'password' })
+
+  const response = await Sttp
+    .withBasicAuth('username', 'password')
+    .get(`${baseUrl}/with-basic-auth`)
+
+  expect(response.status()).toEqual(200)
+  expect(response.payload()).toMatchObject({ headers: { authorization: 'Basic dXNlcm5hbWU6cGFzc3dvcmQ=' } })
+})
+
+test('.withBasicAuth(): neither username nor password', async () => {
+  const config = await Sttp
+    .withBasicAuth()
+    .requestConfig()
+
+  expect(config.auth).toEqual({ username: undefined, password: undefined })
+
+  const response = await Sttp
+    .withBasicAuth()
+    .get(`${baseUrl}/with-basic-auth`)
+
+  expect(response.status()).toEqual(200)
+  expect(response.payload().headers.authorization).not.toBeUndefined()
+})
+
+test('.withTimeout()', async () => {
+  const config = await Sttp
+    .withTimeout(2)
+    .requestConfig()
+
+  expect(config.timeout).toEqual(2)
+})
+
+test('.withTimeoutInSeconds()', async () => {
+  const config = await Sttp
+    .withTimeoutInSeconds(2)
+    .requestConfig()
+
+  expect(config.timeout).toEqual(2000)
 })
 
 test('.withToken()', async () => {
@@ -66,6 +236,76 @@ test('.withToken() and type', async () => {
   expect(response.status()).toEqual(200)
   expect(response.payload()).toMatchObject({
     headers: { authorization: 'X-Bearer token' }
+  })
+})
+
+test('.withOptions()', async () => {
+  const response = await Sttp
+    .withOptions({ data: { name: 'Supercharge' } })
+    .withToken('token')
+    .post(`${baseUrl}/with-options`)
+
+  expect(response.status()).toEqual(200)
+  expect(response.payload()).toMatchObject({
+    payload: { name: 'Supercharge' },
+    headers: { authorization: 'Bearer token' }
+  })
+})
+
+test('.asJson()', async () => {
+  const response = await Sttp
+    .asJson()
+    .withPayload({ name: 'Supercharge' })
+    .post(`${baseUrl}/with-options`)
+
+  expect(response.status()).toEqual(200)
+  expect(response.payload()).toMatchObject({
+    payload: { name: 'Supercharge' }
+  })
+})
+
+test('.asFormParams()', async () => {
+  const response = await Sttp
+    .asFormParams()
+    .withPayload({ name: 'Supercharge' })
+    .post(`${baseUrl}/with-options`)
+
+  expect(response.status()).toEqual(200)
+  expect(response.payload()).toMatchObject({
+    payload: { name: 'Supercharge' }
+  })
+})
+
+test('.accept()', async () => {
+  const response = await Sttp
+    .accept('text/supercharge')
+    .get(`${baseUrl}/accept`)
+
+  expect(response.status()).toEqual(200)
+  expect(response.payload()).toMatchObject({
+    headers: { accept: 'text/supercharge' }
+  })
+})
+
+test('.acceptJson()', async () => {
+  const response = await Sttp
+    .acceptJson()
+    .get(`${baseUrl}/accept`)
+
+  expect(response.status()).toEqual(200)
+  expect(response.payload()).toMatchObject({
+    headers: { accept: 'application/json' }
+  })
+})
+
+test('.contentType()', async () => {
+  const response = await Sttp
+    .contentType('application/supercharge')
+    .get(`${baseUrl}/accept`)
+
+  expect(response.status()).toEqual(200)
+  expect(response.payload()).toMatchObject({
+    headers: { 'content-type': 'application/supercharge' }
   })
 })
 
