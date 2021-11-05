@@ -328,4 +328,10 @@ test('supports fluent interface', async () => {
   })
 })
 
+test('fails to send request to unavailable server', async () => {
+  await expect(
+    Sttp.get('http://unavailable.server/path')
+  ).rejects.toThrow()
+})
+
 test.run()
