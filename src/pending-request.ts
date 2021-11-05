@@ -338,11 +338,11 @@ export class PendingRequest {
         await this.createAndSendRequest(method, url)
       )
     } catch (error: any) {
-      if (error.request) {
-        throw error
+      if (error.response) {
+        return new SttpResponse(error.response)
       }
 
-      return new SttpResponse(error.response)
+      throw error
     }
   }
 
