@@ -7,8 +7,7 @@
     "url": "https://github.com/supercharge/sttp/issues"
   },
   "dependencies": {
-    "axios": "~0.24.0",
-    "deepmerge": "~4.2.2"
+    "axios": "~0.24.0"
   },
   "devDependencies": {
     "@supercharge/tsconfig": "~2.0.0",

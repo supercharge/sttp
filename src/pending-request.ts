@@ -1,6 +1,5 @@
 'use strict'
 
-import Merge from 'deepmerge'
 import { SttpResponse } from './sttp-response'
 import Axios, { AxiosInstance, AxiosRequestConfig, AxiosRequestHeaders, AxiosResponse } from 'axios'
 
@@ -47,7 +46,7 @@ export class PendingRequest {
    * @returns {PendingRequest}
    */
   withHeaders (headers: AxiosRequestHeaders): this {
-    this.request = Merge(this.request, { headers })
+    Object.assign(this.request, { headers: { ...this.request.headers, ...headers } })
 
     return this
   }
@@ -60,7 +59,7 @@ export class PendingRequest {
    * @returns {PendingRequest}
    */
   withQueryParams (queryParams: object): this {
-    this.request = Merge(this.request, { params: queryParams })
+    Object.assign(this.request, { params: { ...this.request.params, ...queryParams } })
 
     return this
   }
@@ -101,7 +100,7 @@ export class PendingRequest {
    * @returns {PendingRequest}
    */
   withOptions<D = any> (options: AxiosRequestConfig<D> = {}): this {
-    this.request = Merge(this.request, options)
+    Object.assign(this.request, options)
 
     return this
   }
