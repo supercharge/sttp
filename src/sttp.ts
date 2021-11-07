@@ -6,6 +6,15 @@ import { PendingRequest } from './pending-request'
 
 export class Sttp {
   /**
+   * Create a reusable Sttp instance.
+   *
+   * @returns {PendingRequest}
+   */
+  static create (): PendingRequest {
+    return new PendingRequest()
+  }
+
+  /**
    * Add request headers.
    *
    * @param {Object} headers

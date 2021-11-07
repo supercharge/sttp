@@ -24,6 +24,30 @@ test.after(async () => {
   await server.stop()
 })
 
+test('.create()', async () => {
+  const client = Sttp.create()
+  client
+    .withHeaders({ 'x-client': 'sttp' })
+    .withQueryParams({ name: 'Supercharge' })
+
+  const response1 = await client.get(baseUrl)
+  expect(response1.status()).toEqual(200)
+  expect(response1.payload()).toMatchObject({
+    query: { name: 'Supercharge' },
+    headers: { 'x-client': 'sttp' }
+  })
+
+  client.withPayload({ foo: 'bar' })
+
+  const response2 = await client.post(baseUrl)
+  expect(response2.status()).toEqual(200)
+  expect(response2.payload()).toMatchObject({
+    payload: { foo: 'bar' },
+    query: { name: 'Supercharge' },
+    headers: { 'x-client': 'sttp' }
+  })
+})
+
 test('sends a get request', async () => {
   const response = await Sttp.get(baseUrl)
   expect(response.status()).toEqual(200)
