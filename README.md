@@ -8,13 +8,12 @@
     <h3>Sttp</h3>
   </p>
   <p>
-    A simple Axios wrapper for an enjoyable developer experience.
+    An Axios wrapper for an enjoyable developer experience.
   </p>
   <br/>
   <p>
     <a href="#installation"><strong>Installation</strong></a> ·
-    <a href="#Docs"><strong>Docs</strong></a> ·
-    <a href="#usage"><strong>Usage</strong></a>
+    <a href="#resources"><strong>Resources</strong></a>
   </p>
   <br/>
   <br/>
@@ -40,24 +39,9 @@ npm i @supercharge/sttp
 ```
 
 
-## Docs
-Find all the [details for `@supercharge/sttp` in the extensive Supercharge docs](https://superchargejs.com/docs/sttp).
+## Resources
 
-
-## Usage
-Using `@supercharge/sttp` is pretty straightforward.
-
-For example, you may …:
-
-```js
-const Sttp = require('@supercharge/sttp')
-
-const response = await Sttp
-  .withQueryParams({ page: 3 })
-  .withHeaders({ 'X-API-Token': 123 })
-  .withPayload({ name: 'Supercharge' })
-  .post('/url')
-```
+- [Documentation](https://superchargejs.com/docs/sttp)
 
 
 ## Contributing
