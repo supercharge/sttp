@@ -1,8 +1,8 @@
 'use strict'
 
-import { AxiosRequestHeaders } from 'axios'
 import { SttpResponse } from './sttp-response'
 import { PendingRequest } from './pending-request'
+import { AxiosRequestConfig, AxiosRequestHeaders } from 'axios'
 
 export class Sttp {
   /**
@@ -78,7 +78,7 @@ export class Sttp {
    *
    * @returns {PendingRequest}
    */
-  static withOptions (options: object): PendingRequest {
+  static withOptions<D = any> (options: AxiosRequestConfig<D>): PendingRequest {
     return new PendingRequest().withOptions(options)
   }
 
