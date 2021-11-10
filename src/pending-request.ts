@@ -224,9 +224,7 @@ export class PendingRequest {
    * @throws
    */
   async get<R> (url: string, queryParams: object = {}): Promise<SttpResponse<R>> {
-    if (queryParams) {
-      this.withQueryParams(queryParams)
-    }
+    this.withQueryParams(queryParams)
 
     return this.send<R>('GET', url)
   }
@@ -296,9 +294,7 @@ export class PendingRequest {
    * @throws
    */
   async delete<R> (url: string, queryParams = {}): Promise<SttpResponse<R>> {
-    if (queryParams) {
-      this.withQueryParams(queryParams)
-    }
+    this.withQueryParams(queryParams)
 
     return this.send<R>('DELETE', url)
   }
@@ -314,9 +310,7 @@ export class PendingRequest {
    * @throws
    */
   async options<R> (url: string, queryParams = {}): Promise<SttpResponse<R>> {
-    if (queryParams) {
-      this.withQueryParams(queryParams)
-    }
+    this.withQueryParams(queryParams)
 
     return this.send<R>('OPTIONS', url)
   }
