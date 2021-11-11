@@ -29,7 +29,7 @@
 ---
 
 ## Introduction
-A short introduction for `@supercharge/sttp`.
+`@supercharge/sttp` is an elegant wrapper around the [`axios`](https://github.com/axios/axios) HTTP client. It provides a fluent interface allowing you to create HTTP requests communicating with other web applications.
 
 
 ## Installation
