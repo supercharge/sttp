@@ -15,6 +15,17 @@ export class Sttp {
   }
 
   /**
+   * Use the given `baseUrl` for all requests.
+   *
+   * @param {String} baseUrl
+   *
+   * @returns {PendingRequest}
+   */
+  static withBaseUrl (baseUrl: string): PendingRequest {
+    return new PendingRequest().withBaseUrl(baseUrl)
+  }
+
+  /**
    * Add request headers.
    *
    * @param {Object} headers

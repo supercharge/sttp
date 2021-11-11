@@ -132,6 +132,19 @@ test('sends an options request with query params', async () => {
   })
 })
 
+test('.withBaseUrl', async () => {
+  const response = await Sttp
+    .withBaseUrl(baseUrl)
+    .get('/v2', { name: 'Supercharge' })
+
+  expect(response.status()).toEqual(200)
+  expect(response.payload()).toMatchObject({ query: { name: 'Supercharge' } })
+
+  expect(() => Sttp.withBaseUrl()).toThrow('The base URL must be a string')
+  expect(() => Sttp.withBaseUrl({})).toThrow('The base URL must be a string')
+  expect(() => Sttp.withBaseUrl(null)).toThrow('The base URL must be a string')
+})
+
 test('.withHeaders()', async () => {
   const response = await Sttp
     .withHeaders({ name: 'Supercharge' })

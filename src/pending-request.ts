@@ -39,6 +39,23 @@ export class PendingRequest {
   }
 
   /**
+   * Use the given `baseUrl` for all requests.
+   *
+   * @param {String} baseUrl
+   *
+   * @returns {PendingRequest}
+   */
+  withBaseUrl (baseUrl: string): this {
+    if (typeof baseUrl !== 'string') {
+      throw new Error(`The base URL must be a string. Received "${typeof baseUrl}"`)
+    }
+
+    this.request.baseURL = baseUrl
+
+    return this
+  }
+
+  /**
    * Add request headers.
    *
    * @param {Object} headers
