@@ -434,7 +434,7 @@ export class Sttp {
    *
    * @throws
    */
-  static async post<R> (url: string, payload: any): Promise<SttpResponse<R>> {
+  static async post<R> (url: string, payload?: any): Promise<SttpResponse<R>> {
     return new this().post(url, payload)
   }
 
@@ -448,7 +448,7 @@ export class Sttp {
     *
     * @throws
     */
-  async post<R> (url: string, payload: any): Promise<SttpResponse<R>> {
+  async post<R> (url: string, payload?: any): Promise<SttpResponse<R>> {
     if (payload) {
       this.withPayload(payload)
     }
@@ -466,7 +466,7 @@ export class Sttp {
    *
    * @throws
    */
-  static async put<R> (url: string, payload: any): Promise<SttpResponse<R>> {
+  static async put<R> (url: string, payload?: any): Promise<SttpResponse<R>> {
     return new this().put(url, payload)
   }
 
@@ -480,7 +480,7 @@ export class Sttp {
     *
     * @throws
     */
-  async put<R> (url: string, payload: any): Promise<SttpResponse<R>> {
+  async put<R> (url: string, payload?: any): Promise<SttpResponse<R>> {
     if (payload) {
       this.withPayload(payload)
     }
@@ -498,7 +498,7 @@ export class Sttp {
    *
    * @throws
    */
-  static async patch<R> (url: string, payload: any): Promise<SttpResponse<R>> {
+  static async patch<R> (url: string, payload?: any): Promise<SttpResponse<R>> {
     return new this().patch(url, payload)
   }
 
@@ -512,7 +512,7 @@ export class Sttp {
     *
     * @throws
     */
-  async patch<R> (url: string, payload: any): Promise<SttpResponse<R>> {
+  async patch<R> (url: string, payload?: any): Promise<SttpResponse<R>> {
     if (payload) {
       this.withPayload(payload)
     }
@@ -544,7 +544,7 @@ export class Sttp {
     *
     * @throws
     */
-  async delete<R> (url: string, queryParams = {}): Promise<SttpResponse<R>> {
+  async delete<R> (url: string, queryParams: object = {}): Promise<SttpResponse<R>> {
     this.withQueryParams(queryParams)
 
     return this.send<R>('DELETE', url)
@@ -574,7 +574,7 @@ export class Sttp {
     *
     * @throws
     */
-  async options<R> (url: string, queryParams = {}): Promise<SttpResponse<R>> {
+  async options<R> (url: string, queryParams: object = {}): Promise<SttpResponse<R>> {
     this.withQueryParams(queryParams)
 
     return this.send<R>('OPTIONS', url)
