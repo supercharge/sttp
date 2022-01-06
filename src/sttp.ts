@@ -94,7 +94,7 @@ export class Sttp {
     * @returns {Sttp}
     */
   withHeaders (headers: AxiosRequestHeaders): this {
-    Object.assign(this.request, { headers: { ...this.request.headers, ...headers } })
+    this.request.headers = { ...this.request.headers, ...headers }
 
     return this
   }
@@ -118,7 +118,7 @@ export class Sttp {
     * @returns {Sttp}
     */
   withQueryParams (queryParams: object): this {
-    Object.assign(this.request, { params: { ...this.request.params, ...queryParams } })
+    this.request.params = { ...this.request.params, ...queryParams }
 
     return this
   }
