@@ -297,6 +297,7 @@ test('.asJson()', async () => {
 
   expect(response.status()).toEqual(200)
   expect(response.payload()).toMatchObject({
+    headers: { 'content-type': 'application/json' },
     payload: { name: 'Supercharge' }
   })
 })
