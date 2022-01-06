@@ -78,7 +78,11 @@ test('sends a post request with payload', async () => {
 
 test('sends a put request', async () => {
   const response = await Sttp.put(baseUrl)
+
   expect(response.status()).toEqual(200)
+  expect(response.payload()).toMatchObject({
+    headers: { 'content-type': 'application/json' }
+  })
 })
 
 test('sends a put request with payload', async () => {
