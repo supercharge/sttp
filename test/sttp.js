@@ -48,6 +48,14 @@ test('.create()', async () => {
   })
 })
 
+test('.axios()', () => {
+  const client = Sttp.create()
+  const instance = client.axios()
+
+  expect(instance).toBeDefined()
+  expect(instance.name).toBe('wrap')
+})
+
 test('sends a get request', async () => {
   const response = await Sttp.get(baseUrl)
   expect(response.status()).toEqual(200)
