@@ -12,7 +12,7 @@ export class Sttp {
   /**
      * The request configuration.
      */
-  private readonly axios: AxiosInstance
+  private readonly axiosInstance: AxiosInstance
 
   /**
      * The payload format for a JSON or form-url-encoded request.
@@ -24,7 +24,7 @@ export class Sttp {
      */
   constructor () {
     this.request = {}
-    this.axios = Axios.create()
+    this.axiosInstance = Axios.create()
 
     this.asJson()
   }
@@ -45,6 +45,15 @@ export class Sttp {
     */
   requestConfig (): AxiosRequestConfig {
     return this.request
+  }
+
+  /**
+   * Returns the Axios instance
+   *
+   * @returns {AxiosInstance}
+   */
+  axios (): AxiosInstance {
+    return this.axiosInstance
   }
 
   /**
@@ -613,7 +622,7 @@ export class Sttp {
     * @returns {Request}
     */
   async createAndSendRequest (method: HttpMethod, url: string): Promise<AxiosResponse> {
-    return await this.axios({
+    return await this.axiosInstance({
       url,
       method,
       withCredentials: true,
