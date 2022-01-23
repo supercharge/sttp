@@ -48,7 +48,7 @@ export class Sttp {
   }
 
   /**
-   * Returns the Axios instance
+   * Returns the Axios instance.
    *
    * @returns {AxiosInstance}
    */
