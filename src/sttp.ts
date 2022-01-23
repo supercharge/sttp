@@ -10,8 +10,8 @@ export class Sttp {
   private request: AxiosRequestConfig
 
   /**
-     * The request configuration.
-     */
+   * The request configuration.
+   */
   private readonly axiosInstance: AxiosInstance
 
   /**
