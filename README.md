@@ -41,7 +41,7 @@ npm i @supercharge/sttp
 
 ## Resources
 
-- 📖  &nbsp; [Documentation](https://superchargejs.com/docs/sttp)
+- 📖 &nbsp; [Documentation](https://superchargejs.com/docs/sttp)
 
 
 ## Contributing
