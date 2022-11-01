@@ -46,8 +46,14 @@ class TestServer {
       return
     }
 
-    await new Promise(resolve => {
-      this.server.close(() => resolve())
+    return await new Promise((resolve, reject) => {
+      this.server.close((error) => {
+        if (error) {
+          return reject(error)
+        }
+
+        resolve()
+      })
     })
   }
 }
