@@ -25,7 +25,7 @@ test('response.headers()', async () => {
   })
 
   await send(server, async () => {
-    const response = await Sttp.get(baseUrl)
+    const response = await Sttp.withHeaders({ Connection: 'close' }).get(baseUrl)
     expect(response.headers()).toMatchObject({ 'x-response': 'Supercharge' })
   })
 })
@@ -36,7 +36,9 @@ test('response.data()', async () => {
   })
 
   await send(server, async () => {
-    const response = await Sttp.get(baseUrl)
+    const response = await Sttp.withHeaders({
+      Connection: 'close'
+    }).get(baseUrl)
     expect(response.data()).toBe('ok')
   })
 })
@@ -47,7 +49,7 @@ test('response.payload()', async () => {
   })
 
   await send(server, async () => {
-    const response = await Sttp.get(baseUrl)
+    const response = await Sttp.withHeaders({ Connection: 'close' }).get(baseUrl)
     expect(response.status()).toBe(200)
     expect(response.payload()).toBe('ok')
   })
@@ -60,7 +62,7 @@ test('response.status()', async () => {
   })
 
   await send(server, async () => {
-    const response = await Sttp.get(baseUrl)
+    const response = await Sttp.withHeaders({ Connection: 'close' }).get(baseUrl)
     expect(response.status()).toBe(201)
   })
 })
@@ -72,7 +74,7 @@ test('response.isSuccess()', async () => {
   })
 
   await send(server, async () => {
-    const response = await Sttp.get(baseUrl)
+    const response = await Sttp.withHeaders({ Connection: 'close' }).get(baseUrl)
     expect(response.isSuccess()).toBe(true)
   })
 })
@@ -84,7 +86,7 @@ test('response.isRedirect()', async () => {
   })
 
   await send(server, async () => {
-    const response = await Sttp.get(baseUrl)
+    const response = await Sttp.withHeaders({ Connection: 'close' }).get(baseUrl)
     expect(response.isRedirect()).toBe(true)
   })
 })
@@ -96,7 +98,7 @@ test('response.isError()', async () => {
   })
 
   await send(server, async () => {
-    const response = await Sttp.get(baseUrl)
+    const response = await Sttp.withHeaders({ Connection: 'close' }).get(baseUrl)
     expect(response.isError()).toBe(true)
   })
 })
@@ -108,7 +110,7 @@ test('response.isClientError()', async () => {
   })
 
   await send(server, async () => {
-    const response = await Sttp.get(baseUrl)
+    const response = await Sttp.withHeaders({ Connection: 'close' }).get(baseUrl)
     expect(response.isError()).toBe(true)
     expect(response.isClientError()).toBe(true)
     expect(response.isServerError()).toBe(false)
@@ -122,7 +124,7 @@ test('response.isServerError()', async () => {
   })
 
   await send(server, async () => {
-    const response = await Sttp.get(baseUrl)
+    const response = await Sttp.withHeaders({ Connection: 'close' }).get(baseUrl)
     expect(response.status()).toBe(503)
     expect(response.isError()).toBe(true)
     expect(response.isClientError()).toBe(false)
