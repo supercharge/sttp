@@ -67,6 +67,19 @@ test('response.status()', async () => {
   })
 })
 
+test('response.statusText()', async () => {
+  const server = Server.create().withMiddleware(ctx => {
+    ctx.body = 'ok'
+    ctx.status = 201
+  })
+
+  await send(server, async () => {
+    const response = await Sttp.withHeaders({ Connection: 'close' }).get(baseUrl)
+    expect(response.status()).toBe(201)
+    expect(response.statusText()).toBe("Created")
+  })
+})
+
 test('response.isSuccess()', async () => {
   const server = Server.create().withMiddleware(ctx => {
     ctx.body = 'ok'

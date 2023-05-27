@@ -27,6 +27,15 @@ export class SttpResponse<ResponseType = any> {
   }
 
   /**
+   * Returns the response status text / description corresponding to the status code.
+   *
+   * @returns {String}
+   */
+  statusText (): string {
+    return this.response.statusText
+  }
+
+  /**
    * Returns the response payload. This method is an alias for `response.payload()`.
    *
    * @returns {*}
