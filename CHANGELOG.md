@@ -1,6 +1,17 @@
 # Changelog
 
 
+## [1.4.0](https://github.com/supercharge/sttp/compare/v1.3.0...v1.4.0) - 2023-05-29
+
+### Added
+- add `response.statusText()` method: returns the response status text (related to the response status code)
+  - for example, a return value for a response with status 201 is `Created`
+- test Node.js v20
+
+### Removed
+- drop testing of Node.js v19 in favor of Node.js v20
+
+
 ## [1.3.0](https://github.com/supercharge/sttp/compare/v1.2.0...v1.3.0) - 2022-01-23
 
 ### Added
