@@ -133,6 +133,17 @@ export class Sttp {
   }
 
   /**
+    * Clears all query parameters from the current request.
+    *
+    * @returns {Sttp}
+    */
+  removeQueryParams (): this {
+    this.request.params = {}
+
+    return this
+  }
+
+  /**
    * Add basic authentication via `username` and `password` to the request.
    *
    * @param {String} username
