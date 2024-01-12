@@ -48,6 +48,24 @@ test('.create()', async () => {
   })
 })
 
+test('.removeQueryParams()', async () => {
+  const client = Sttp.create()
+  client
+    .withHeaders({ 'x-client': 'sttp' })
+    .withQueryParams({ name: 'Supercharge', age: '25' })
+
+  // Assuming the removeQueryParams method removes all query parameters
+  client.removeQueryParams()
+
+  const response = await client.get(baseUrl)
+
+  // After removing query parameters, the payload should not contain any query parameters
+  expect(response.payload()).toMatchObject({
+    query: {},
+    headers: { 'x-client': 'sttp' }
+  })
+})
+
 test('.axios()', () => {
   const client = Sttp.create()
   const instance = client.axios()
