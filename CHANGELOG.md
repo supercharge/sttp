@@ -1,6 +1,16 @@
 # Changelog
 
 
+## [1.5.0](https://github.com/supercharge/sttp/compare/v1.4.0...v1.5.0) - 2024-01-21
+
+### Added
+- add `sttp.removeQueryParams()` method: remove all query parameters from the current request
+- add `sttp.axiosStatic()` method: expose the wrapped Axios client
+
+### Updated
+- bump dependencies
+
+
 ## [1.4.0](https://github.com/supercharge/sttp/compare/v1.3.0...v1.4.0) - 2023-05-29
 
 ### Added
