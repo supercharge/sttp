@@ -1,5 +1,6 @@
 'use strict'
 
+const Axios = require('axios')
 const { test } = require('uvu')
 const expect = require('expect')
 const { Sttp } = require('../dist')
@@ -72,6 +73,12 @@ test('.axios()', () => {
 
   expect(instance).toBeDefined()
   expect(instance.name).toBe('wrap')
+})
+
+test('.axiosStatic()', () => {
+  const axios = Sttp.create().axiosStatic()
+
+  expect(axios).toEqual(Axios)
 })
 
 test('sends a get request', async () => {

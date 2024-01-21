@@ -1,7 +1,7 @@
 'use strict'
 
 import { SttpResponse } from './sttp-response'
-import Axios, { AxiosInstance, AxiosRequestConfig, AxiosRequestHeaders, AxiosResponse } from 'axios'
+import Axios, { AxiosInstance, AxiosRequestConfig, AxiosRequestHeaders, AxiosResponse, AxiosStatic } from 'axios'
 
 export class Sttp {
   /**
@@ -54,6 +54,13 @@ export class Sttp {
    */
   axios (): AxiosInstance {
     return this.axiosInstance
+  }
+
+  /**
+   * Returns the wrapped Axios client.
+   */
+  axiosStatic (): AxiosStatic {
+    return Axios
   }
 
   /**
